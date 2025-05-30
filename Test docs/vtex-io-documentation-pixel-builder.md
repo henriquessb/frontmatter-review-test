@@ -21,7 +21,7 @@ pixel
 ```
 
 - `body.html`: HTML file with the script that will run in the body of the store pages. Scripts running in the body can perform better, but some events might be missed since the execution takes place while HTML elements are rendered.
-- `head.html`: HTML file with the script that will run in the head of the store pages. Running scripts in the head can have a higher impact on performance but ensures all events are detected since the execution takes place before HTML elements are rendered.
+- `head.html`: HTML file with the script that will run in the head of the store pages. Running scripts in the head can have a higher impact on performance, but ensures all events are detected since the execution takes place before HTML elements are rendered.
 
 ## Usage
 
