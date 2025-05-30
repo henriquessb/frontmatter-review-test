@@ -26,8 +26,8 @@ g = Github(GITHUB_TOKEN)
 repo = g.get_repo(GITHUB_REPOSITORY)
 pr = repo.get_pull(pr_number)
 
-# Get changed files in the PR
-changed_files = [f for f in pr.get_files() if f.filename.endswith(('.md', '.mdx'))]
+# Get changed Markdown files in the PR (only in 'Test docs' folder)
+changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('Test docs/'))]
 
 print(f"Found {len(changed_files)} markdown files in PR:")
 error_found = False
