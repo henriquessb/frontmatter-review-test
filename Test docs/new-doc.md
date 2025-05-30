@@ -2,4 +2,4 @@
 title: "New doc"
 ---
 
-New doc
+New doc.
