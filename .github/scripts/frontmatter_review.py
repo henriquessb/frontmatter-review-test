@@ -59,7 +59,7 @@ for f in changed_files:
                     elif key == 'tags':
                         value =  []
                     fm_dict[key] = value
-                elif line.startswith('    - '):
+                elif line.startswith('- '):
                     if 'tags' in fm_dict.keys():
                         fm_dict['tags'].append(value[6:].strip())
                     else:
