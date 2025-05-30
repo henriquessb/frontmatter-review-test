@@ -33,4 +33,15 @@ print(f"Found {len(changed_files)} markdown files in PR:")
 for f in changed_files:
     print(f"- {f.filename}")
     content = repo.get_contents(f.filename, ref=pr.head.ref)
-    print(content.decoded_content.decode('utf-8')[:500])  # Print first 500 chars
+    text = content.decoded_content.decode('utf-8')
+    # Extract frontmatter
+    if text.startswith('---'):
+        end = text.find('\n---', 3)
+        if end != -1:
+            frontmatter = text[3:end+1].strip()
+            print(f"Frontmatter for {f.filename}:")
+            print(frontmatter)
+        else:
+            print(f"ERROR: {f.filename} frontmatter not closed with '---'.")
+    else:
+        print(f"ERROR: {f.filename} does not start with frontmatter block ('---').")
