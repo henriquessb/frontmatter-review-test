@@ -29,8 +29,8 @@ pr = repo.get_pull(pr_number)
 
 # Get changed Markdown files in the PR (only in 'Test docs' folder)
 changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('Test docs/'))]
-
-print(f"Found {len(changed_files)} markdown files in PR:")
+n_files = len(changed_files)
+print(f"Found {n_files} markdown file{'s' if n_files != 1 else ''} in PR:")
 error_found = False
 frontmatters = {}
 for f in changed_files:
