@@ -2,4 +2,4 @@
 title: "New doc"
 --
 
-Doc
+New doc
