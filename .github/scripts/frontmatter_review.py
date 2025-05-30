@@ -68,6 +68,34 @@ for f in changed_files:
             for k, v in fm_dict.items():
                 print(f'  {k}: {v}')
             print('}')
+            # Validate required fields if present
+            import re
+            iso8601_regex = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
+            for key, value in fm_dict.items():
+                if key == 'title':
+                    if not isinstance(value, str) or not value:
+                        print(f"ERROR: '{key}' in {f.filename} must be a non-empty string.")
+                        error_found = True
+                if key == 'excerpt':
+                    if not isinstance(value, str) or not value:
+                        print(f"ERROR: '{key}' in {f.filename} must be a non-empty string.")
+                        error_found = True
+                if key == 'slug':
+                    if not (isinstance(value, str) and re.fullmatch(r'[a-z0-9\-]+', value)):
+                        print(f"ERROR: 'slug' in {f.filename} must contain only lowercase letters, numbers, and hyphens.")
+                        error_found = True
+                if key == 'hidden':
+                    if not isinstance(value, bool):
+                        print(f"ERROR: 'hidden' in {f.filename} must be a boolean (true or false).")
+                        error_found = True
+                if key == 'createdAt':
+                    if not (isinstance(value, str) and iso8601_regex.match(value)):
+                        print(f"ERROR: '{key}' in {f.filename} must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
+                        error_found = True
+                if key == 'updatedAt':
+                    if not (isinstance(value, str) and iso8601_regex.match(value)):
+                        print(f"ERROR: '{key}' in {f.filename} must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
+                        error_found = True
         else:
             print(f"ERROR: {f.filename} frontmatter not closed with '---'.")
             error_found = True
