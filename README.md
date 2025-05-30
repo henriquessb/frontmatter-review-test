@@ -9,7 +9,13 @@ The action tests the frontmatter with the following items:
 |title|Non-empty `string`|
 |slug|`string` with only lowercase letters, hyphens and numbers|
 |excerpt|`string`|
-|createdAt|`string` with ISO 8060 format (YYYY-MM-DDThh:mm:ss.sssZ)|
-|updatedAt|`string` with ISO 8060 format (YYYY-MM-DDThh:mm:ss.sssZ)|
+|createdAt|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
+|updatedAt|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
 |hidden|`boolean`|
 |tags|`list`|
+
+## Validation rules
+
+All items are optional. The action verifies:
+- If the frontmatter in each Markdown file of the PR follows the YAML format.
+- For each item in the YAML, if it is one of the defined types and follows the rule of the type. Undefined types are not verified.
