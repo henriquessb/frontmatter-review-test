@@ -30,6 +30,7 @@ pr = repo.get_pull(pr_number)
 changed_files = [f for f in pr.get_files() if f.filename.endswith(('.md', '.mdx'))]
 
 print(f"Found {len(changed_files)} markdown files in PR:")
+error_found = False
 for f in changed_files:
     print(f"- {f.filename}")
     content = repo.get_contents(f.filename, ref=pr.head.ref)
@@ -39,9 +40,15 @@ for f in changed_files:
         end = text.find('\n---', 3)
         if end != -1:
             frontmatter = text[3:end+1].strip()
-            print(f"Frontmatter for {f.filename}:")
+            print(f"Frontmatter for \"{f.filename}\":")
             print(frontmatter)
         else:
             print(f"ERROR: {f.filename} frontmatter not closed with '---'.")
+            error_found = True
     else:
         print(f"ERROR: {f.filename} does not start with frontmatter block ('---').")
+        error_found = True
+
+if error_found:
+    print("\nFrontmatter errors found. Failing the action.")
+    sys.exit(1)
