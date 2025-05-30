@@ -47,22 +47,23 @@ for f in changed_files:
                 line = line.strip()
                 if not line:
                     continue
-                if ':' not in line:
-                    print(f"ERROR: Malformed frontmatter line in {f.filename}: {line}")
-                    error_found = True
-                    continue
-                key, value = line.split(':', 1)
-                key = key.strip()
-                value = value.strip()
-                # Parse value
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                elif value in ['true', 'false']:
-                    value = value == 'true'
-                else:
-                    print(f"ERROR: Value '{value}' in {f.filename} is not a quoted string or boolean.")
-                    error_found = True
-                fm_dict[key] = value
+                if ':' in line:
+                  key, value = line.split(':', 1)
+                  key = key.strip()
+                  value = value.strip()
+                  # Parse value
+                  if value.startswith('"') and value.endswith('"'):
+                      fm_dict[key] = value[1:-1]
+                  elif value in ['true', 'false']:
+                      fm_dict[key] = value == 'true'
+                  elif key == 'tags':
+                      fm_dict[key] =  []
+                  elif value.startswith('    - '):
+                      if 'tags' in fm_dict.keys():
+                          fm_dict['tags'].append(value[6:].strip())
+                      else:
+                          print(f"ERROR: 'tags' key not found in {f.filename} frontmatter before list of tags.")
+                          error_found = True
             frontmatters[f.filename] = fm_dict
             print(f'Frontmatter dict for "{f.filename}":\n{{')
             for k, v in fm_dict.items():
