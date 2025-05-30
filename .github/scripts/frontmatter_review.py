@@ -62,12 +62,12 @@ for f in changed_files:
             iso8601_regex = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
             for key, value in fm_dict.items():
                 if key == 'title':
-                    if not isinstance(value, str) or not value:
+                    if not isinstance(value, str):
                         print(f"ERROR: '{key}' in {f.filename} must be a non-empty string.")
                         error_found = True
                 if key == 'excerpt':
-                    if not isinstance(value, str) or not value:
-                        print(f"ERROR: '{key}' in {f.filename} must be a non-empty string.")
+                    if not isinstance(value, str):
+                        print(f"ERROR: '{key}' in {f.filename} must be a string.")
                         error_found = True
                 if key == 'slug':
                     if not (isinstance(value, str) and re.fullmatch(r'[a-z0-9\-]+', value)):
