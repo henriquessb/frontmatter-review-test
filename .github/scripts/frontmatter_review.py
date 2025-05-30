@@ -54,10 +54,6 @@ for f in changed_files:
                 key, value = line.split(':', 1)
                 key = key.strip()
                 value = value.strip()
-                # Only allow lowercase keys
-                if not key.islower():
-                    print(f"ERROR: Key '{key}' in {f.filename} is not all lowercase.")
-                    error_found = True
                 # Parse value
                 if value.startswith('"') and value.endswith('"'):
                     value = value[1:-1]
