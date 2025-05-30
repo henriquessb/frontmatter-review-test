@@ -85,6 +85,11 @@ for f in changed_files:
                     if not (isinstance(value, str) and iso8601_regex.match(value)):
                         print(f"ERROR: '{key}' in {f.filename} must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
                         error_found = True
+                if key == 'type':
+                    allowed_types = {"added", "deprecated", "fixed", "improved", "info", "removed"}
+                    if not (isinstance(value, str) and value in allowed_types):
+                        print(f"ERROR: 'type' in {f.filename} must be one of: {', '.join(allowed_types)}.")
+                        error_found = True
         else:
             print(f"ERROR: {f.filename} frontmatter not closed with '---'.")
             error_found = True
