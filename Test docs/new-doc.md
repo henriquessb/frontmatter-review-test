@@ -7,7 +7,7 @@ madeup: "20"
 tags:
     - First Tag
     - Second Tag
-type: "new"
+type: "added"
 ---
 
 New doc.
