@@ -64,7 +64,10 @@ for f in changed_files:
                     error_found = True
                 fm_dict[key] = value
             frontmatters[f.filename] = fm_dict
-            print(f"Frontmatter dict for \"{f.filename}\": {fm_dict}")
+            print(f'Frontmatter dict for "{f.filename}":\n{{')
+            for k, v in fm_dict.items():
+                print(f'  {k}: {v}')
+            print('}')
         else:
             print(f"ERROR: {f.filename} frontmatter not closed with '---'.")
             error_found = True
