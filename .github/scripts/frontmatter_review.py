@@ -1,6 +1,7 @@
 import os
 import sys
 from github import Github
+import yaml
 
 # Get environment variables
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -28,8 +29,8 @@ pr = repo.get_pull(pr_number)
 
 # Get changed Markdown files in the PR (only in 'Test docs' folder)
 changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('Test docs/'))]
-
-print(f"Found {len(changed_files)} markdown files in PR:")
+n_files = len(changed_files)
+print(f"Found {n_files} markdown file{'s' if n_files != 1 else ''} in PR:")
 error_found = False
 frontmatters = {}
 for f in changed_files:
@@ -41,30 +42,16 @@ for f in changed_files:
         end = text.find('\n---', 3)
         if end != -1:
             frontmatter = text[3:end+1].strip()
-            # Parse frontmatter into dict
-            fm_dict = {}
-            for line in frontmatter.split('\n'):
-                line = line.strip()
-                if not line:
-                    continue
-                if ':' in line:
-                    key, value = line.split(':', 1)
-                    key = key.strip()
-                    value = value.strip()
-                    # Parse value
-                    if value.startswith('"') and value.endswith('"'):
-                        value = value[1:-1]
-                    elif value in ['true', 'false']:
-                        value = value == 'true'
-                    elif key == 'tags':
-                        value =  []
-                    fm_dict[key] = value
-                elif line.startswith('- '):
-                    if 'tags' in fm_dict.keys():
-                        fm_dict['tags'].append(line[2:].strip())
-                    else:
-                        print(f"ERROR: 'tags' key not found in {f.filename} frontmatter before list of tags.")
-                        error_found = True
+            try:
+                fm_dict = yaml.safe_load(frontmatter)
+                if not isinstance(fm_dict, dict):
+                    print(f"ERROR: Frontmatter in {f.filename} is not a valid YAML dictionary.")
+                    error_found = True
+                    fm_dict = {}
+            except Exception as e:
+                print(f"ERROR: Failed to parse YAML frontmatter in {f.filename}: {e}")
+                error_found = True
+                fm_dict = {}
             frontmatters[f.filename] = fm_dict
             print(f'Frontmatter dict for "{f.filename}":\n{{')
             for k, v in fm_dict.items():
@@ -75,12 +62,12 @@ for f in changed_files:
             iso8601_regex = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
             for key, value in fm_dict.items():
                 if key == 'title':
-                    if not isinstance(value, str) or not value:
+                    if not isinstance(value, str):
                         print(f"ERROR: '{key}' in {f.filename} must be a non-empty string.")
                         error_found = True
                 if key == 'excerpt':
-                    if not isinstance(value, str) or not value:
-                        print(f"ERROR: '{key}' in {f.filename} must be a non-empty string.")
+                    if not isinstance(value, str):
+                        print(f"ERROR: '{key}' in {f.filename} must be a string.")
                         error_found = True
                 if key == 'slug':
                     if not (isinstance(value, str) and re.fullmatch(r'[a-z0-9\-]+', value)):

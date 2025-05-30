@@ -6,7 +6,7 @@ The action tests the frontmatter with the following items:
 
 |Item|Type|
 |-|-|
-|title|`string`|
+|title|Non-empty `string`|
 |slug|`string` with only lowercase letters, hyphens and numbers|
 |excerpt|`string`|
 |createdAt|`string` with ISO 8060 format (YYYY-MM-DDThh:mm:ss.sssZ)|
