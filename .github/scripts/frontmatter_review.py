@@ -31,6 +31,7 @@ changed_files = [f for f in pr.get_files() if f.filename.endswith(('.md', '.mdx'
 
 print(f"Found {len(changed_files)} markdown files in PR:")
 error_found = False
+frontmatters = {}
 for f in changed_files:
     print(f"- {f.filename}")
     content = repo.get_contents(f.filename, ref=pr.head.ref)
@@ -40,8 +41,34 @@ for f in changed_files:
         end = text.find('\n---', 3)
         if end != -1:
             frontmatter = text[3:end+1].strip()
-            print(f"Frontmatter for \"{f.filename}\":")
-            print(frontmatter)
+            # Parse frontmatter into dict
+            fm_dict = {}
+            for line in frontmatter.split('\n'):
+                line = line.strip()
+                if not line:
+                    continue
+                if ':' not in line:
+                    print(f"ERROR: Malformed frontmatter line in {f.filename}: {line}")
+                    error_found = True
+                    continue
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                # Only allow lowercase keys
+                if not key.islower():
+                    print(f"ERROR: Key '{key}' in {f.filename} is not all lowercase.")
+                    error_found = True
+                # Parse value
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]
+                elif value in ['true', 'false']:
+                    value = value == 'true'
+                else:
+                    print(f"ERROR: Value '{value}' in {f.filename} is not a quoted string or boolean.")
+                    error_found = True
+                fm_dict[key] = value
+            frontmatters[f.filename] = fm_dict
+            print(f"Frontmatter dict for \"{f.filename}\": {fm_dict}")
         else:
             print(f"ERROR: {f.filename} frontmatter not closed with '---'.")
             error_found = True
