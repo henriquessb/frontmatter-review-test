@@ -1,6 +1,7 @@
 import os
 import sys
 from github import Github
+import yaml
 
 # Get environment variables
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -41,30 +42,16 @@ for f in changed_files:
         end = text.find('\n---', 3)
         if end != -1:
             frontmatter = text[3:end+1].strip()
-            # Parse frontmatter into dict
-            fm_dict = {}
-            for line in frontmatter.split('\n'):
-                line = line.strip()
-                if not line:
-                    continue
-                if ':' in line:
-                    key, value = line.split(':', 1)
-                    key = key.strip()
-                    value = value.strip()
-                    # Parse value
-                    if value.startswith('"') and value.endswith('"'):
-                        value = value[1:-1]
-                    elif value in ['true', 'false']:
-                        value = value == 'true'
-                    elif key == 'tags':
-                        value =  []
-                    fm_dict[key] = value
-                elif line.startswith('- '):
-                    if 'tags' in fm_dict.keys():
-                        fm_dict['tags'].append(line[2:].strip())
-                    else:
-                        print(f"ERROR: 'tags' key not found in {f.filename} frontmatter before list of tags.")
-                        error_found = True
+            try:
+                fm_dict = yaml.safe_load(frontmatter)
+                if not isinstance(fm_dict, dict):
+                    print(f"ERROR: Frontmatter in {f.filename} is not a valid YAML dictionary.")
+                    error_found = True
+                    fm_dict = {}
+            except Exception as e:
+                print(f"ERROR: Failed to parse YAML frontmatter in {f.filename}: {e}")
+                error_found = True
+                fm_dict = {}
             frontmatters[f.filename] = fm_dict
             print(f'Frontmatter dict for "{f.filename}":\n{{')
             for k, v in fm_dict.items():
