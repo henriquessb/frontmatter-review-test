@@ -61,7 +61,7 @@ for f in changed_files:
                     fm_dict[key] = value
                 elif line.startswith('- '):
                     if 'tags' in fm_dict.keys():
-                        fm_dict['tags'].append(value[2:].strip())
+                        fm_dict['tags'].append(line[2:].strip())
                     else:
                         print(f"ERROR: 'tags' key not found in {f.filename} frontmatter before list of tags.")
                         error_found = True
