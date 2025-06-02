@@ -28,10 +28,13 @@ g = Github(GITHUB_TOKEN)
 repo = g.get_repo(GITHUB_REPOSITORY)
 pr = repo.get_pull(pr_number)
 
+def plural_list(list):
+    return 's' if len(list) != 1 else ''
+
 # Get changed Markdown files in the PR (only in 'docs' folder)
 changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('docs/'))]
-n_files = len(changed_files)
-print(f"Found {n_files} markdown file{'s' if n_files != 1 else ''} in PR:")
+
+print(f"Found {n_files} markdown file{plural_list(changed_files)} in PR:")
 
 error_found = False
 frontmatters = {}
@@ -116,7 +119,7 @@ for f in changed_files:
             if f.filename.startswith('docs/release-notes'):
                 missing_fields = not_present_keys(rn_mandatory_fields, fm_dict)
                 if missing_fields:
-                    print(f"ERROR: '{f.filename}' release note missing {missing_fields} in frontmatter.")
+                    print(f"ERROR: '{f.filename}' release note missing {missing_fields} field{plural_list(missing_fields)} in frontmatter.")
                     error_found = True
             else:
                 if 'type' in fm_dict:
@@ -126,18 +129,18 @@ for f in changed_files:
             if f.filename.startswith('docs/guides'):
                 missing_fields = not_present_keys(guides_mandatory_fields, fm_dict)
                 if missing_fields:
-                    print(f"ERROR: '{f.filename}' guide missing {missing_fields} in frontmatter.")
+                    print(f"ERROR: '{f.filename}' guide missing {missing_fields} field{plural_list(missing_fields)} in frontmatter.")
                     error_found = True
 
             if f.filename.startswith('docs/troubleshooting'):
                 missing_fields = not_present_keys(ts_mandatory_fields, fm_dict)
                 if missing_fields:
-                    print(f"ERROR: '{f.filename}' troubleshooting missing {missing_fields} in frontmatter.")
+                    print(f"ERROR: '{f.filename}' troubleshooting missing {missing_fields} field{plural_list(missing_fields)} in frontmatter.")
                     error_found = True
 
             if f.filename.startswith('docs/faststore'):
                 if fm_dict.keys() != {'title'}:
-                    print(f"ERROR: '{f.filename}' faststore docs must have only 'title' in frontmatter.")
+                    print(f"ERROR: '{f.filename}' faststore docs must have only 'title' field in frontmatter.")
                     error_found = True
 
         else:
