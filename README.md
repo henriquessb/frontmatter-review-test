@@ -2,21 +2,40 @@
 
 This repository implements a GitHub Action test to review the frontmatter of Markdown files in pull requests. The Markdown files used for testing are from the VTEX Developer Portal.
 
-The action tests the frontmatter with the following items:
-
-|Item|Type|
-|-|-|
-|title|Non-empty `string`|
-|slug|`string` with only lowercase letters, hyphens, and numbers|
-|excerpt|`string`|
-|createdAt|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
-|updatedAt|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
-|hidden|`boolean`|
-|tags|`list`|
-
 ## Validation rules
 
-All items are optional. The action verifies:
+### Field types
 
-- If the frontmatter in each Markdown file of the PR follows the YAML format.
-- For each item in the YAML, if it is one of the defined types and follows the rules of the type. Undefined types are not verified.
+The action validates the frontmatter with the following fields:
+
+|Field|Type|
+|-|-|
+|`title`|Non-empty `string`|
+|`slug`|`string` with only lowercase letters, hyphens, and numbers. Must be equal the filename without extension.|
+|`excerpt`|`string`|
+|`createdAt`|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
+|`updatedAt`|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
+|`hidden`|`boolean`|
+|`tags`|`list`|
+|`type`|`string` with release note type. Must be one of: added, deprecated, fixed, improved, info, removed.|
+
+### Documentation types
+
+The action validates the frontmatter fields for each documentation type as below:
+
+|Field|Release note|Guide|Troubleshooting|FastStore|
+|-|:-:|:-:|:-:|:-:|
+|`title`|⭕|⭕|⭕|⭕|
+|`slug`|⭕|⭕|⭕|❌|
+|`excerpt`|⭕|⭕|⭕|❌|
+|`createdAt`|⭕|⭕|⭕|❌|
+|`updatedAt`|⭕|⭕|⭕|❌|
+|`hidden`|⭕|⭕|⭕|❌|
+|`tags`|✅|✅|⭕|❌|
+|`type`|⭕|❌|❌|❌|
+
+Legend:
+
+- ⭕: Mandatory
+- ✅: Allowed
+- ❌: Prohibited
