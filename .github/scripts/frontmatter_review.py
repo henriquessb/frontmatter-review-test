@@ -34,7 +34,7 @@ def plural_list(list):
 # Get changed Markdown files in the PR (only in 'docs' folder)
 changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('docs/'))]
 
-print(f"Found {n_files} markdown file{plural_list(changed_files)} in PR:")
+print(f"Found {len(changed_files)} markdown file{plural_list(changed_files)} in PR:")
 
 error_found = False
 frontmatters = {}
