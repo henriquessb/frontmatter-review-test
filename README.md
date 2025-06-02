@@ -11,7 +11,7 @@ The action validates the frontmatter with the following fields:
 |Field|Type|
 |-|-|
 |`title`|Non-empty `string`|
-|`slug`|`string` with only lowercase letters, hyphens, and numbers|
+|`slug`|`string` with only lowercase letters, hyphens, and numbers. Must be equal the filename without extension.|
 |`excerpt`|`string`|
 |`createdAt`|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
 |`updatedAt`|`string` with ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ)|
