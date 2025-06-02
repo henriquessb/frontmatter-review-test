@@ -111,11 +111,11 @@ for f in changed_files:
 
             rn_mandatory_fields = ['type', 'slug', 'excerpt', 'hidden', 'createdAt', 'updatedAt']
             guides_mandatory_fields = ['slug', 'excerpt', 'hidden', 'createdAt', 'updatedAt']
-            ts_mandatory_fields = ['slug', 'excerpt', 'hidden', 'createdAt', 'updatedAt', 'tags']
+            ts_mandatory_fields = ['tags', 'slug', 'excerpt', 'hidden', 'createdAt', 'updatedAt']
 
             if f.filename.startswith('docs/release-notes'):
                 missing_fields = not_present_keys(rn_mandatory_fields, fm_dict)
-                if not missing_fields:
+                if missing_fields:
                     print(f"ERROR: {f.filename} release note missing {missing_fields} in frontmatter.")
                     error_found = True
             else:
@@ -125,13 +125,13 @@ for f in changed_files:
 
             if f.filename.startswith('docs/guides'):
                 missing_fields = not_present_keys(guides_mandatory_fields, fm_dict)
-                if not missing_fields:
+                if missing_fields:
                     print(f"ERROR: {f.filename} guide missing {missing_fields} in frontmatter.")
                     error_found = True
 
             if f.filename.startswith('docs/troubleshooting'):
                 missing_fields = not_present_keys(ts_mandatory_fields, fm_dict)
-                if not missing_fields:
+                if missing_fields:
                     print(f"ERROR: {f.filename} troubleshooting missing {missing_fields} in frontmatter.")
                     error_found = True
 
