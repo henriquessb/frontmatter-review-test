@@ -102,7 +102,7 @@ for f in changed_files:
 
             # Validate mandatory fields for all doc types
             if 'title' not in fm_dict:
-                print(f"ERROR: {f.filename} must have a 'title' field in frontmatter.")
+                print(f"ERROR: '{f.filename}' must have a 'title' field in frontmatter.")
                 error_found = True
 
             # Validate fields by doc type using folder structure
@@ -116,35 +116,35 @@ for f in changed_files:
             if f.filename.startswith('docs/release-notes'):
                 missing_fields = not_present_keys(rn_mandatory_fields, fm_dict)
                 if missing_fields:
-                    print(f"ERROR: {f.filename} release note missing {missing_fields} in frontmatter.")
+                    print(f"ERROR: '{f.filename}' release note missing {missing_fields} in frontmatter.")
                     error_found = True
             else:
                 if 'type' in fm_dict:
-                    print(f"ERROR: {f.filename} should not have a 'type' field in frontmatter for non-release notes.")
+                    print(f"ERROR: '{f.filename}' should not have a 'type' field in frontmatter for non-release notes.")
                     error_found = True
 
             if f.filename.startswith('docs/guides'):
                 missing_fields = not_present_keys(guides_mandatory_fields, fm_dict)
                 if missing_fields:
-                    print(f"ERROR: {f.filename} guide missing {missing_fields} in frontmatter.")
+                    print(f"ERROR: '{f.filename}' guide missing {missing_fields} in frontmatter.")
                     error_found = True
 
             if f.filename.startswith('docs/troubleshooting'):
                 missing_fields = not_present_keys(ts_mandatory_fields, fm_dict)
                 if missing_fields:
-                    print(f"ERROR: {f.filename} troubleshooting missing {missing_fields} in frontmatter.")
+                    print(f"ERROR: '{f.filename}' troubleshooting missing {missing_fields} in frontmatter.")
                     error_found = True
 
             if f.filename.startswith('docs/faststore'):
                 if fm_dict.keys() != {'title'}:
-                    print(f"ERROR: {f.filename} faststore docs must have only 'title' in frontmatter.")
+                    print(f"ERROR: '{f.filename}' faststore docs must have only 'title' in frontmatter.")
                     error_found = True
 
         else:
-            print(f"ERROR: {f.filename} frontmatter not closed with '---'.")
+            print(f"ERROR: '{f.filename}' frontmatter not closed with '---'.")
             error_found = True
     else:
-        print(f"ERROR: {f.filename} does not start with frontmatter block ('---').")
+        print(f"ERROR: '{f.filename}' does not start with frontmatter block ('---').")
         error_found = True
 
 if error_found:
