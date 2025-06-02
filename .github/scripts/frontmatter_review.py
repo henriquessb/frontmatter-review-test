@@ -27,16 +27,18 @@ g = Github(GITHUB_TOKEN)
 repo = g.get_repo(GITHUB_REPOSITORY)
 pr = repo.get_pull(pr_number)
 
-# Get changed Markdown files in the PR (only in 'Test docs' folder)
-changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('Test docs/'))]
+# Get changed Markdown files in the PR (only in 'docs' folder)
+changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('docs/'))]
 n_files = len(changed_files)
 print(f"Found {n_files} markdown file{'s' if n_files != 1 else ''} in PR:")
+
 error_found = False
 frontmatters = {}
 for f in changed_files:
     print(f"- {f.filename}")
     content = repo.get_contents(f.filename, ref=pr.head.ref)
     text = content.decoded_content.decode('utf-8')
+
     # Extract frontmatter
     if text.startswith('---'):
         end = text.find('\n---', 3)
@@ -57,6 +59,7 @@ for f in changed_files:
             for k, v in fm_dict.items():
                 print(f'  {k}: {v}')
             print('}')
+
             # Validate required fields if present
             import re
             iso8601_regex = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
