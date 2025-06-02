@@ -51,17 +51,17 @@ for f in changed_files:
             try:
                 fm_dict = yaml.safe_load(frontmatter)
                 if not isinstance(fm_dict, dict):
-                    print(f"ERROR: Frontmatter in {f.filename} is not a valid YAML dictionary.")
+                    print(f"ERROR: Frontmatter in '{f.filename}' is not a valid YAML dictionary.")
                     error_found = True
                     fm_dict = {}
             except Exception as e:
-                print(f"ERROR: Failed to parse YAML frontmatter in {f.filename}: {e}")
+                print(f"ERROR: Failed to parse YAML frontmatter in '{f.filename}': {e}")
                 error_found = True
                 fm_dict = {}
             frontmatters[f.filename] = fm_dict
-            print(f'Frontmatter dict for "{f.filename}":\n{{')
+            print(f"Frontmatter dict for '{f.filename}':\n{{")
             for k, v in fm_dict.items():
-                print(f'  {k}: {v}')
+                print(f"  {k}: {v}")
             print('}')
 
             # Validate formatting in present fields
@@ -69,38 +69,41 @@ for f in changed_files:
             for key, value in fm_dict.items():
                 if key == 'title':
                     if not isinstance(value, str) or not value:
-                        print(f"ERROR: '{key}' in {f.filename} must be a non-empty string.")
+                        print(f"ERROR: '{key}' in '{f.filename}' must be a non-empty string.")
                         error_found = True
                         continue
                 if key == 'excerpt':
                     if not isinstance(value, str):
-                        print(f"ERROR: '{key}' in {f.filename} must be a string.")
+                        print(f"ERROR: '{key}' in '{f.filename}' must be a string.")
                         error_found = True
                         continue
                 if key == 'slug':
                     if not (isinstance(value, str) and re.fullmatch(r'[a-z0-9\-]+', value)):
-                        print(f"ERROR: 'slug' in {f.filename} must contain only lowercase letters, numbers, and hyphens.")
+                        print(f"ERROR: 'slug' in '{f.filename}' must contain only lowercase letters, numbers, and hyphens.")
                         error_found = True
-                        continue
+                    if value!= f.filename.split('/')[-1].replace('.md', ''):
+                        print(f"ERROR: 'slug' in '{f.filename}' must match the filename without extension.")
+                        error_found = True
+                    continue
                 if key == 'hidden':
                     if not isinstance(value, bool):
-                        print(f"ERROR: 'hidden' in {f.filename} must be a boolean (true or false).")
+                        print(f"ERROR: 'hidden' in '{f.filename}' must be a boolean (true or false).")
                         error_found = True
                         continue
                 if key == 'createdAt':
                     if not (isinstance(value, str) and iso8601_regex.match(value)):
-                        print(f"ERROR: '{key}' in {f.filename} must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
+                        print(f"ERROR: '{key}' in '{f.filename}' must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
                         error_found = True
                         continue
                 if key == 'updatedAt':
                     if not (isinstance(value, str) and iso8601_regex.match(value)):
-                        print(f"ERROR: '{key}' in {f.filename} must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
+                        print(f"ERROR: '{key}' in '{f.filename}' must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
                         error_found = True
                         continue
                 if key == 'type':
                     allowed_types = {"added", "deprecated", "fixed", "improved", "info", "removed"}
                     if not (isinstance(value, str) and value in allowed_types):
-                        print(f"ERROR: 'type' in {f.filename} must be one of: {', '.join(allowed_types)}.")
+                        print(f"ERROR: 'type' in '{f.filename}' must be one of: {', '.join(allowed_types)}.")
                         error_found = True
 
             # Validate mandatory fields for all doc types
@@ -140,7 +143,7 @@ for f in changed_files:
 
             if f.filename.startswith('docs/faststore'):
                 if fm_dict.keys() != {'title'}:
-                    print(f"ERROR: '{f.filename}' faststore docs must have only 'title' field in frontmatter.")
+                    print(f"ERROR: '{f.filename}' FastStore docs must have only 'title' field in frontmatter.")
                     error_found = True
 
         else:
