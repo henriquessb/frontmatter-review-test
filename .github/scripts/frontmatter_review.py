@@ -51,7 +51,7 @@ for f in changed_files:
             try:
                 fm_dict = yaml.safe_load(frontmatter)
                 if not isinstance(fm_dict, dict):
-                    print('\n\n')
+                    print(' \n')
                     print(f"ERROR: Frontmatter in '{f.filename}' is not a valid YAML dictionary.")
                     error_found = True
                     fm_dict = {}
@@ -60,7 +60,7 @@ for f in changed_files:
                 error_found = True
                 fm_dict = {}
             frontmatters[f.filename] = fm_dict
-            print('\n\n')
+            print(' \n')
             print(f"Frontmatter dict for '{f.filename}':\n{{")
             for k, v in fm_dict.items():
                 print(f"  {k}: {v}")
@@ -156,6 +156,6 @@ for f in changed_files:
         error_found = True
 
 if error_found:
-    print('\n\n')
+    print(' \n')
     print("Frontmatter errors found. Failing the action.")
     sys.exit(1)
