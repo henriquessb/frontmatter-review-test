@@ -25,14 +25,14 @@ The action validates the frontmatter fields for each documentation type as below
 
 |Field|Release note|Guide|Troubleshooting|FastStore|
 |-|:-:|:-:|:-:|:-:|
-|`title`|⭕|⭕|⭕|⭕|
-|`slug`|⭕|⭕|⭕|❌|
-|`excerpt`|⭕|⭕|⭕|❌|
+|`title`    |⭕|⭕|⭕|⭕|
+|`slug`     |⭕|⭕|⭕|❌|
+|`excerpt`  |⭕|⭕|⭕|❌|
 |`createdAt`|⭕|⭕|⭕|❌|
 |`updatedAt`|⭕|⭕|⭕|❌|
-|`hidden`|⭕|⭕|⭕|❌|
-|`tags`|✅|✅|⭕|❌|
-|`type`|⭕|❌|❌|❌|
+|`hidden`   |⭕|⭕|⭕|❌|
+|`tags`     |✅|✅|⭕|❌|
+|`type`     |⭕|❌|❌|❌|
 
 Legend:
 
