@@ -76,12 +76,12 @@ for f in changed_files:
                     if not isinstance(value, str) or not value:
                         print(f"ERROR: '{key}' in '{f.filename}' must be a non-empty string.")
                         error_found = True
-                        continue
+                    continue
                 if key == 'excerpt':
                     if not isinstance(value, str):
                         print(f"ERROR: '{key}' in '{f.filename}' must be a string.")
                         error_found = True
-                        continue
+                    continue
                 if key == 'slug':
                     if not (isinstance(value, str) and re.fullmatch(r'[a-z0-9\-]+', value)):
                         print(f"ERROR: 'slug' in '{f.filename}' must contain only lowercase letters, numbers, and hyphens.")
@@ -94,17 +94,22 @@ for f in changed_files:
                     if not isinstance(value, bool):
                         print(f"ERROR: 'hidden' in '{f.filename}' must be a boolean (true or false).")
                         error_found = True
-                        continue
+                    continue
                 if key == 'createdAt':
                     if not (isinstance(value, str) and iso8601_regex.match(value)):
                         print(f"ERROR: '{key}' in '{f.filename}' must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
                         error_found = True
-                        continue
+                    continue
                 if key == 'updatedAt':
                     if not (isinstance(value, str) and iso8601_regex.match(value)):
                         print(f"ERROR: '{key}' in '{f.filename}' must be a string in ISO 8601 format (YYYY-MM-DDThh:mm:ss.sssZ).")
                         error_found = True
-                        continue
+                    continue
+                if key == 'tags':
+                    if not (isinstance(value, list)):
+                        print(f"ERROR: 'tags' in '{f.filename}' must be a list.")
+                        error_found = True
+                    continue
                 if key == 'type':
                     allowed_types = {"added", "deprecated", "fixed", "improved", "info", "removed"}
                     if not (isinstance(value, str) and value in allowed_types):
