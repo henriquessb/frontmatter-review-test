@@ -31,8 +31,11 @@ pr = repo.get_pull(pr_number)
 def plural_list(list):
     return 's' if len(list) != 1 else ''
 
-# Get changed Markdown files in the PR (only in 'docs' folder)
-changed_files = [f for f in pr.get_files() if (f.filename.endswith(('.md', '.mdx')) and f.filename.startswith('docs/'))]
+# Get changed Markdown files in the PR (only in 'docs/guides', 'docs/release-notes', 'docs/troubleshooting', and 'docs/faststore' folders)
+changed_files = [f for f in pr.get_files() if (
+    f.filename.endswith(('.md', '.mdx'))
+    and f.filename.startswith(('docs/guides/', 'docs/release-notes/', 'docs/troubleshooting/', 'docs/faststore/'))
+)]
 
 print(f"Found {len(changed_files)} markdown file{plural_list(changed_files)} in PR:")
 
