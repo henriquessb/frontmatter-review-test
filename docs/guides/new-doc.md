@@ -1,10 +1,9 @@
 ---
-title: "New doc"
-slug: "new-doc"
-excerpt: "A new doc"
-createdAt: "2025-05-30T12:47:00.000Z"
-updatedAt: "2025-05-30T12:47:00.000Z"
-hidden: true
+title: 1
+slug: "New-doc"
+excerpt: false
+createdAt: "2025-05-30T12:47:00.000"
+updatedAt: ""
 madeup: "20"
 tags:
     - First Tag
