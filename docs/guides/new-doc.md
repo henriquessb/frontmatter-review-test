@@ -10,5 +10,4 @@ tags:
     - First Tag
     - Second Tag
 ---
-
 New doc.
