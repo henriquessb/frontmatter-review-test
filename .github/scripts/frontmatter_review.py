@@ -82,7 +82,7 @@ for f in changed_files:
                     if not (isinstance(value, str) and re.fullmatch(r'[a-z0-9\-]+', value)):
                         errors.append(f"'slug' must contain only lowercase letters, numbers, and hyphens.")
                         error_found = True
-                    if value != f.filename.split('/')[-1].replace('.md', '').replace('.mdx', ''):
+                    if value != f.filename.split('/')[-1].replace('.mdx', '').replace('.md', ''):
                         errors.append(f"'slug' must match the filename without extension.")
                         error_found = True
                     continue
