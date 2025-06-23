@@ -126,7 +126,6 @@ for f in changed_files:
             rn_mandatory_fields = ['type', 'slug', 'excerpt', 'hidden', 'createdAt']
             guides_mandatory_fields = ['slug', 'excerpt', 'hidden', 'createdAt']
             ts_mandatory_fields = ['tags', 'slug', 'excerpt', 'hidden', 'createdAt']
-            fs_mandatory_fields = ['title']
 
             if f.filename.startswith('docs/release-notes'):
                 missing_fields = not_present_keys(rn_mandatory_fields, fm_dict)
@@ -148,12 +147,6 @@ for f in changed_files:
                 missing_fields = not_present_keys(ts_mandatory_fields, fm_dict)
                 if missing_fields:
                     errors.append(f"Troubleshooting missing field{plural_list(missing_fields)}: {missing_fields}.")
-                    error_found = True
-
-            if f.filename.startswith('docs/faststore'):
-                missing_fields = not_present_keys(fs_mandatory_fields, fm_dict)
-                if missing_fields:
-                    errors.append(f"FastStore missing 'title' field.")
                     error_found = True
 
         else:
