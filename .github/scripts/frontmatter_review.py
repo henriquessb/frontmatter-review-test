@@ -64,7 +64,7 @@ for f in changed_files:
                 error_found = True
                 fm_dict = {}
 
-            print(f"{fm_dict}\n")
+            print(fm_dict)
             frontmatters[f.filename] = fm_dict
 
             # Regular expression for ISO 8601 date format (YYYY-MM-DDThh:mm:ss.sssZ)
