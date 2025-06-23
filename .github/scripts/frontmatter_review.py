@@ -65,8 +65,10 @@ for f in changed_files:
                 fm_dict = {}
             frontmatters[f.filename] = fm_dict
 
-            # Validate formatting in present fields
+            # Regular expression for ISO 8601 date format (YYYY-MM-DDThh:mm:ss.sssZ)
             iso8601_regex = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
+
+            # Validate formatting in present fields
             for key, value in fm_dict.items():
                 if key == 'title':
                     if not isinstance(value, str) or not value:
@@ -121,9 +123,10 @@ for f in changed_files:
             def not_present_keys(keys, dict):
                 return [key for key in keys if key not in dict]
 
-            rn_mandatory_fields = ['type', 'slug', 'excerpt', 'hidden', 'createdAt', 'updatedAt']
-            guides_mandatory_fields = ['slug', 'excerpt', 'hidden', 'createdAt', 'updatedAt']
-            ts_mandatory_fields = ['tags', 'slug', 'excerpt', 'hidden', 'createdAt', 'updatedAt']
+            rn_mandatory_fields = ['type', 'slug', 'excerpt', 'hidden', 'createdAt']
+            guides_mandatory_fields = ['slug', 'excerpt', 'hidden', 'createdAt']
+            ts_mandatory_fields = ['tags', 'slug', 'excerpt', 'hidden', 'createdAt']
+            fs_mandatory_fields = ['title']
 
             if f.filename.startswith('docs/release-notes'):
                 missing_fields = not_present_keys(rn_mandatory_fields, fm_dict)
@@ -148,8 +151,9 @@ for f in changed_files:
                     error_found = True
 
             if f.filename.startswith('docs/faststore'):
-                if fm_dict.keys() != {'title'}:
-                    errors.append(f"FastStore docs must have only 'title' field in frontmatter.")
+                missing_fields = not_present_keys(fs_mandatory_fields, fm_dict)
+                if missing_fields:
+                    errors.append(f"FastStore missing 'title' field.")
                     error_found = True
 
         else:
